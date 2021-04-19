@@ -18,7 +18,7 @@ AC_PROG_CC
 # Checks for libraries.
 AC_CHECK_LIB([pcap], [pcap_open_live], [], AC_MSG_ERROR([libpcap (dev) is required for this program]))
 AC_CHECK_LIB([pthread], [pthread_mutex_lock], [], AC_MSG_ERROR([libpthread (dev)is required for this program]))
-AC_CHECK_LIB([net], [libnet_init_packet], [], AC_MSG_ERROR([libnet0 (dev) is required for this program]))
+AC_CHECK_LIB([net], [libnet_init], [], AC_MSG_ERROR([libnet1 (dev) is required for this program]))
 
 # Checks for header files.
 AC_HEADER_STDC

@@ -69,9 +69,9 @@ void* senderThread(void *arg)
 	// Initialize the generic packet
     int packet_size = LIBNET_IP_H + LIBNET_TCP_H; // no payload
 	u_char *packet;
-    libnet_init_packet(packet_size, &packet);
+    libnet_init(packet_size, &packet);
     if (packet == NULL) {
-        libnet_error(LIBNET_ERR_FATAL, (char*)"libnet_init_packet failed\n");
+        libnet_error(LIBNET_ERR_FATAL, (char*)"libnet_init failed\n");
 		pthread_exit(NULL);
     }
 
@@ -227,7 +227,7 @@ void sendRequest(Pkt pkt, int network, int type, int v)
 
 	u_char *dataPacket;
 	int dataPackSize = LIBNET_IP_H + LIBNET_TCP_H + strlen((char *)payload);
-	libnet_init_packet(dataPackSize, &dataPacket);
+	libnet_init(dataPackSize, &dataPacket);
 	if (dataPacket != NULL) {
 		TcpUtils::buildTcpData(dataPacket, pkt.srcIp, pkt.dstIp, pkt.srcPort, pkt.dstPort, pkt.seqn, pkt.ackn, payload);
 		if (libnet_write_ip(network, dataPacket, dataPackSize) < dataPackSize) {
@@ -236,7 +236,7 @@ void sendRequest(Pkt pkt, int network, int type, int v)
 		if(v)cout << "HTTP request packet sent" << endl;
 		libnet_destroy_packet(&dataPacket);
     } else {
-		if(v)cout << "libnet_init_packet failed" << endl;
+		if(v)cout << "libnet_init failed" << endl;
 	}
 }
 

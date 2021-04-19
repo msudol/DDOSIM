@@ -3913,10 +3913,10 @@ echo "$as_me: error: libpthread (dev)is required for this program" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-##TODO: check for libnet (update to accept libnet1 as libnet0 is deprecated)
-{ echo "$as_me:$LINENO: checking for libnet_init_packet in -lnet" >&5
-echo $ECHO_N "checking for libnet_init_packet in -lnet... $ECHO_C" >&6; }
-if test "${ac_cv_lib_net_libnet_init_packet+set}" = set; then
+# check for libnet (update to accept libnet1 as libnet0 is deprecated)
+{ echo "$as_me:$LINENO: checking for libnet_init in -lnet" >&5
+echo $ECHO_N "checking for libnet_init in -lnet... $ECHO_C" >&6; }
+if test "${ac_cv_lib_net_libnet_init+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -3934,11 +3934,11 @@ cat >>conftest.$ac_ext <<_ACEOF
 #ifdef __cplusplus
 extern "C"
 #endif
-char libnet_init_packet ();
+char libnet_init ();
 int
 main ()
 {
-return libnet_init_packet ();
+return libnet_init ();
   ;
   return 0;
 }
@@ -3961,20 +3961,20 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
        $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_net_libnet_init_packet=yes
+  ac_cv_lib_net_libnet_init=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_net_libnet_init_packet=no
+	ac_cv_lib_net_libnet_init=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_net_libnet_init_packet" >&5
-echo "${ECHO_T}$ac_cv_lib_net_libnet_init_packet" >&6; }
-if test $ac_cv_lib_net_libnet_init_packet = yes; then
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_net_libnet_init" >&5
+echo "${ECHO_T}$ac_cv_lib_net_libnet_init" >&6; }
+if test $ac_cv_lib_net_libnet_init = yes; then
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBNET 1
 _ACEOF
@@ -3982,8 +3982,8 @@ _ACEOF
   LIBS="-lnet $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error: libnet0 (dev) is required for this program" >&5
-echo "$as_me: error: libnet0 (dev) is required for this program" >&2;}
+  { { echo "$as_me:$LINENO: error: libnet1 (dev) is required for this program" >&5
+echo "$as_me: error: libnet1 (dev) is required for this program" >&2;}
    { (exit 1); exit 1; }; }
 fi
 

@@ -15,15 +15,22 @@ Requirements
 ------------
 DDOSIM currently requires a system with 32-bit architecture. Kali Linux 32-bit works well.  
 
-Additionally, the following libraries are required: libpcap-dev and libnet0. Libnet0 is 
-deprecated but may be installed by downloading and installing the following packages:
+Additionally, the following libraries are required: libpcap-dev and libnet1. 
+
+v0.2:
+
+Libnet0 from the original v0.2 of DDOSIM is deprecated but may be installed by downloading 
+and installing the following packages:
 
     wget http://launchpadlibrarian.net/1302421/libnet0_1.0.2a-7_i386.deb
     wget http://launchpadlibrarian.net/1302422/libnet0-dev_1.0.2a-7_i386.deb
     dpkg -i libnet0_1.0.2a-7_i386.deb
     dpkg -i libnet0-dev_1.0.2a-7_i386.deb
 
+v0.3:
+
 Install libpcap-dev with: apt-get install libpcap-dev
+Install libnet1-dev with: apt-get install libnet1 (may already be installed)
 
 
 Installation
