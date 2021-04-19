@@ -314,7 +314,8 @@ u_long resolveNameToIp(char *optarg, string &error)
 			bcopy(*he->h_addr_list++, (char *) &a, sizeof(a));
 //			printf("address: %s\n", inet_ntoa(a));
             if (!(ret = libnet_name2addr4((u_char *)inet_ntoa(a), LIBNET_RESOLVE))) {
-               libnet_geterror(LIBNET_ERR_BUF, (char*)"Bad destination address: %s\n", optarg);
+               //libnet_geterror(LIBNET_ERR_BUF, (char*)"Bad destination address: %s\n", optarg);
+			   libnet_geterror(LIBNET_ERR_BUF);
             }
 			break;
 		}
@@ -355,6 +356,5 @@ void prelude2(string ip, string interface)
 		cout << "Error executing system() command: " << cmd << endl;
 	}
 }
-
 
 /* EOF */

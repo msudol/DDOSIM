@@ -69,6 +69,7 @@ void* senderThread(void *arg)
 	// Initialize the generic packet
     int packet_size = LIBNET_IP_H + LIBNET_TCP_H; // no payload
 	u_char *packet;
+	// TODO: Update libnet 1.1 - libnet_init (int injection_type, char *device, char *err_buf)
     libnet_init(packet_size, &packet);
     if (packet == NULL) {
         libnet_error(LIBNET_ERR_FATAL, (char*)"libnet_init failed\n");
@@ -227,6 +228,8 @@ void sendRequest(Pkt pkt, int network, int type, int v)
 
 	u_char *dataPacket;
 	int dataPackSize = LIBNET_IP_H + LIBNET_TCP_H + strlen((char *)payload);
+
+	// TODO: Update libnet 1.1 - libnet_init (int injection_type, char *device, char *err_buf)
 	libnet_init(dataPackSize, &dataPacket);
 	if (dataPacket != NULL) {
 		TcpUtils::buildTcpData(dataPacket, pkt.srcIp, pkt.dstIp, pkt.srcPort, pkt.dstPort, pkt.seqn, pkt.ackn, payload);
@@ -234,6 +237,7 @@ void sendRequest(Pkt pkt, int network, int type, int v)
   			libnet_error(LN_ERR_WARNING, (char*)"libnet_write_ip only wrote less then %d bytes\n", dataPackSize);
 		}
 		if(v)cout << "HTTP request packet sent" << endl;
+		// destroy packet to clean up malloc
 		libnet_destroy_packet(&dataPacket);
     } else {
 		if(v)cout << "libnet_init failed" << endl;
