@@ -313,9 +313,13 @@ u_long resolveNameToIp(char *optarg, string &error)
 		while (*he->h_addr_list) {
 			bcopy(*he->h_addr_list++, (char *) &a, sizeof(a));
 //			printf("address: %s\n", inet_ntoa(a));
-            if (!(ret = libnet_name2addr4((u_char *)inet_ntoa(a), LIBNET_RESOLVE))) {
+			// l here should be a referenet libnet?
+            if (!(ret = libnet_name2addr4(l, (u_char *)inet_ntoa(a), LIBNET_RESOLVE))) {
                //libnet_geterror(LIBNET_ERR_BUF, (char*)"Bad destination address: %s\n", optarg);
-			   libnet_geterror(LIBNET_ERR_BUF);
+			   //libnet_geterror(LIBNET_ERR_BUF);
+
+			   //TODO: figure out errors 
+
             }
 			break;
 		}

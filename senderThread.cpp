@@ -52,12 +52,15 @@ void* senderThread(void *arg)
 	targ->threadId++;
 
 	// Initialize packet sending component
+	// TODO: Remove open_raw_sock deprecated in 1.1
+	/*
     int network = libnet_open_raw_sock(IPPROTO_RAW);
     if (network == -1)
     {
         libnet_error(LIBNET_ERR_FATAL, (char*)"Can't open network. Are you root? Sender thread exit\n");
 		pthread_exit(NULL);
     }
+	*/
 
 	// Get local IP address
 	if(!(localIp = getLocalIp(ifName, error))) {
@@ -67,14 +70,27 @@ void* senderThread(void *arg)
 	localIpStr = (char*)libnet_addr2name4(localIp, 0);
 
 	// Initialize the generic packet
-    int packet_size = LIBNET_IP_H + LIBNET_TCP_H; // no payload
-	u_char *packet;
+    //int packet_size = LIBNET_IP_H + LIBNET_TCP_H; // no payload
+	//u_char *packet;
+
 	// TODO: Update libnet 1.1 - libnet_init (int injection_type, char *device, char *err_buf)
+	/*
     libnet_init(packet_size, &packet);
     if (packet == NULL) {
         libnet_error(LIBNET_ERR_FATAL, (char*)"libnet_init failed\n");
 		pthread_exit(NULL);
     }
+	*/
+
+
+	libnet_t *l
+	char errbuf[LIBNET_ERRBUF_SIZE];
+
+	l = libnet_init(
+			LIBNET_RAW4,    /* or LIBNET_LINK or LIBNET_RAW6 */
+			NULL,           /* or device if you using LIBNET_LINK */
+			errbuf);
+
 
 	libnet_seed_prand();
 	//sourceIp = libnet_name_resolve((u_char *)"192.168.10.55", LIBNET_RESOLVE);
@@ -230,7 +246,16 @@ void sendRequest(Pkt pkt, int network, int type, int v)
 	int dataPackSize = LIBNET_IP_H + LIBNET_TCP_H + strlen((char *)payload);
 
 	// TODO: Update libnet 1.1 - libnet_init (int injection_type, char *device, char *err_buf)
-	libnet_init(dataPackSize, &dataPacket);
+	/* libnet_init(dataPackSize, &dataPacket);*/
+
+	libnet_t *l
+	char errbuf[LIBNET_ERRBUF_SIZE];
+
+	l = libnet_init(
+			LIBNET_RAW4,    /* or LIBNET_LINK or LIBNET_RAW6 */
+			NULL,           /* or device if you using LIBNET_LINK */
+			errbuf);
+
 	if (dataPacket != NULL) {
 		TcpUtils::buildTcpData(dataPacket, pkt.srcIp, pkt.dstIp, pkt.srcPort, pkt.dstPort, pkt.seqn, pkt.ackn, payload);
 		if (libnet_write_ip(network, dataPacket, dataPackSize) < dataPackSize) {

@@ -29,6 +29,8 @@ and installing the following packages:
 
 v0.3:
 
+Working on migration using this guide: https://github.com/libnet/libnet/blob/master/doc/MIGRATION.md
+
 Install libpcap-dev with: apt-get install libpcap-dev
 Install libnet1-dev with: apt-get install libnet1 (may already be installed)
 
